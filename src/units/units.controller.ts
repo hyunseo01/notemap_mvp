@@ -9,12 +9,12 @@ export class UnitsController {
   @Post()
   async create(@Param('pinId') pinId: string, @Body() dto: CreateUnitDto) {
     const data = await this.unitsService.create(pinId, dto);
-    return { success: true, message: 'Unit created', data };
+    return { success: true, message: '유닛 생성됨', data };
   }
 
   @Get()
   async list(@Param('pinId') pinId: string) {
     const data = await this.unitsService.listByPin(pinId);
-    return { success: true, message: 'Units fetched', data };
+    return { success: true, message: '유닛 조회됨', data };
   }
 }
