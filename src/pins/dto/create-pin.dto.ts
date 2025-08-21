@@ -1,8 +1,9 @@
 import { IsNumber, IsOptional, IsString, MaxLength } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreatePinDto {
-  @IsNumber() lat!: number;
-  @IsNumber() lng!: number;
+  @Type(() => Number) @IsNumber() lat!: number;
+  @Type(() => Number) @IsNumber() lng!: number;
 
   @IsString() addressLine!: string;
 

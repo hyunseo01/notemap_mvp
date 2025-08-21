@@ -3,9 +3,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import * as dotenv from 'dotenv';
 import { PinsModule } from './pins/pins.module';
 import { UnitsModule } from './units/units.module';
+
 import { ConfigModule } from '@nestjs/config';
-import { Pin } from './pins/pin.entity';
-import { Unit } from './units/unit.entity';
+import { Pin } from './pins/entities/pin.entity';
+import { Unit } from './units/entities/unit.entity';
 
 dotenv.config();
 
@@ -19,7 +20,7 @@ dotenv.config();
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [Pin, Unit],
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
       logging: false,
     }),

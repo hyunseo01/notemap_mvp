@@ -36,21 +36,11 @@ export class Unit {
   @Column({ name: 'has_terrace', type: 'boolean', default: false })
   hasTerrace!: boolean;
 
-  @Column('decimal', {
-    name: 'area_m2_net',
-    precision: 7,
-    scale: 2,
-    nullable: true,
-  })
-  areaM2Net!: string | null;
+  @Column('double', { name: 'area_m2_net', nullable: true })
+  areaM2Net!: number | null;
 
-  @Column('decimal', {
-    name: 'area_m2_usable',
-    precision: 7,
-    scale: 2,
-    nullable: true,
-  })
-  areaM2Usable!: string | null;
+  @Column('double', { name: 'area_m2_usable', nullable: true })
+  areaM2Usable!: number | null;
 
   @Column({
     name: 'orientation_1',

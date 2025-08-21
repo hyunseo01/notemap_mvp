@@ -13,11 +13,11 @@ export class Pin {
   @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
   id!: string; // BIGINT
 
-  @Column('decimal', { precision: 9, scale: 6 })
-  lat!: string;
+  @Column('double')
+  lat!: number;
 
-  @Column('decimal', { precision: 9, scale: 6 })
-  lng!: string;
+  @Column('double')
+  lng!: number;
 
   @Column({ name: 'address_line', type: 'text' })
   addressLine!: string;
