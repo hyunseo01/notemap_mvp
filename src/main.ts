@@ -24,8 +24,8 @@ async function bootstrap() {
   app.enableCors();
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
 
-  const port = Number(process.env.PORT || 3000);
+  const port = parseInt(process.env.PORT || '3000', 10);
   await app.listen(port, '0.0.0.0');
-  console.log('[BOOT] listening on', port);
+  console.log(`[BOOT] Listening on port ${port}`);
 }
 bootstrap();
