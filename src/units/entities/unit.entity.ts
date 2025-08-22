@@ -2,76 +2,48 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
-  ManyToOne,
+  Index,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Pin } from '../../pins/entities/pin.entity';
 
 @Entity('units')
+@Index('idx_units_pin', ['pinId'])
+@Index('idx_units_lat_lng', ['lat', 'lng'])
 export class Unit {
-  @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
-  id!: string;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-  @Column({ name: 'pin_id', type: 'bigint', unsigned: true })
-  pinId!: string;
+  @Column() pinId: string;
 
-  @ManyToOne(() => Pin, (p) => p.units, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'pin_id' })
-  pin!: Pin;
+  @Column() title: string;
+  @Column({ nullable: true }) address?: string;
 
-  @Column({ name: 'floor_label', type: 'varchar', length: 30, nullable: true })
-  floorLabel!: string | null;
+  @Column('decimal', { precision: 10, scale: 6 }) lat: number;
+  @Column('decimal', { precision: 10, scale: 6 }) lng: number;
 
-  @Column({ type: 'tinyint', nullable: true })
-  rooms!: number | null;
+  @Column({ default: '공개' }) status: '공개' | '보류' | '비공개';
+  @Column({ nullable: true }) dealStatus?: string;
 
-  @Column({ type: 'tinyint', nullable: true })
-  baths!: number | null;
+  @Column({ type: 'bigint', nullable: true }) salePrice?: number; // 예: 500000000
+  @Column({ type: 'int', nullable: true }) maintenanceFee?: number; // 예: 50000
 
-  @Column({ name: 'is_duplex', type: 'boolean', default: false })
-  isDuplex!: boolean;
+  @Column({ nullable: true }) priceText?: string; // 있으면 그대로 보관만
+  @Column('json', { nullable: true }) options?: string[];
+  @Column({ nullable: true }) optionEtc?: string;
+  @Column('json', { nullable: true })
+  unitLines?: {
+    rooms: number;
+    baths: number;
+    duplex?: boolean;
+    terrace?: boolean;
+    primary?: string;
+    secondary?: string;
+  }[];
+  @Column('json', { nullable: true })
+  orientations?: { ho: number; value: string }[];
+  @Column('json', { nullable: true }) images?: string[];
 
-  @Column({ name: 'has_terrace', type: 'boolean', default: false })
-  hasTerrace!: boolean;
-
-  @Column('double', { name: 'area_m2_net', nullable: true })
-  areaM2Net!: number | null;
-
-  @Column('double', { name: 'area_m2_usable', nullable: true })
-  areaM2Usable!: number | null;
-
-  @Column({
-    name: 'orientation_1',
-    type: 'varchar',
-    length: 10,
-    nullable: true,
-  })
-  orientation1!: string | null;
-
-  @Column({
-    name: 'orientation_2',
-    type: 'varchar',
-    length: 10,
-    nullable: true,
-  })
-  orientation2!: string | null;
-
-  @Column({
-    name: 'orientation_3',
-    type: 'varchar',
-    length: 10,
-    nullable: true,
-  })
-  orientation3!: string | null;
-
-  @Column({ type: 'text', nullable: true })
-  memo!: string | null;
-
-  @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
-  createdAt!: Date;
-
-  @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
-  updatedAt!: Date;
+  @CreateDateColumn({ type: 'datetime' }) createdAt: Date;
+  @UpdateDateColumn({ type: 'datetime' }) updatedAt: Date;
 }

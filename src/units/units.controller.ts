@@ -1,20 +1,42 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { UnitsService } from './units.service';
 import { CreateUnitDto } from './dto/create-unit.dto';
+import { UpdateUnitDto } from './dto/update-unit.dto';
 
-@Controller('pins/:pinId/units')
+@Controller('units')
 export class UnitsController {
-  constructor(private readonly unitsService: UnitsService) {}
+  constructor(private readonly service: UnitsService) {}
 
-  @Post()
-  async create(@Param('pinId') pinId: string, @Body() dto: CreateUnitDto) {
-    const data = await this.unitsService.create(pinId, dto);
-    return { success: true, message: '유닛 생성됨', data };
+  // 목록
+  @Get()
+  findAll() {
+    return this.service.findAll();
   }
 
-  @Get()
-  async list(@Param('pinId') pinId: string) {
-    const data = await this.unitsService.listByPin(pinId);
-    return { success: true, message: '유닛 조회됨', data };
+  // 생성
+  @Post()
+  create(@Body() dto: CreateUnitDto) {
+    return this.service.create(dto);
+  }
+
+  // 수정
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() dto: UpdateUnitDto) {
+    return this.service.update(id, dto);
+  }
+
+  // 삭제
+  @Delete(':id')
+  async remove(@Param('id') id: string) {
+    await this.service.remove(id);
+    return { ok: true };
   }
 }
