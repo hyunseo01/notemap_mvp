@@ -1,11 +1,11 @@
 import {
-  Body,
   Controller,
-  Delete,
   Get,
-  Param,
-  Patch,
   Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
 } from '@nestjs/common';
 import { PinsService } from './pins.service';
 import { CreatePinDto } from './dto/create-pin.dto';
@@ -15,34 +15,34 @@ import { UpdatePinDto } from './dto/update-pin.dto';
 export class PinsController {
   constructor(private readonly service: PinsService) {}
 
-  // 목록
   @Get()
-  findAll() {
-    return this.service.findAll();
+  async findAll() {
+    const data = await this.service.findAll();
+    return { success: true, message: 'ok', data };
   }
 
-  // 상세 (+ 최저가 포함)
+  /** 핀 상세 + 매물 요약(unitsSummary) 포함 */
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.service.findOneWithLowest(id);
+  async findOne(@Param('id') id: string) {
+    const data = await this.service.findOne(id);
+    return { success: true, message: 'ok', data };
   }
 
-  // 생성
   @Post()
-  create(@Body() dto: CreatePinDto) {
-    return this.service.create(dto);
+  async create(@Body() dto: CreatePinDto) {
+    const data = await this.service.create(dto);
+    return { success: true, message: 'created', data };
   }
 
-  // 수정
   @Patch(':id')
-  update(@Param('id') id: string, @Body() dto: UpdatePinDto) {
-    return this.service.update(id, dto);
+  async update(@Param('id') id: string, @Body() dto: UpdatePinDto) {
+    const data = await this.service.update(id, dto);
+    return { success: true, message: 'updated', data };
   }
 
-  // 삭제
   @Delete(':id')
   async remove(@Param('id') id: string) {
-    await this.service.remove(id);
-    return { ok: true };
+    const data = await this.service.remove(id);
+    return { success: true, message: 'removed', data };
   }
 }
