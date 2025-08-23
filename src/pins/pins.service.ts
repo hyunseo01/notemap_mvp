@@ -3,7 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Pin } from './entities/pin.entity';
 import { Unit } from '../units/entities/unit.entity';
-import { CreatePinDto, UpdatePinDto } from './dto/create-pin.dto';
+import { CreatePinDto } from './dto/create-pin.dto';
+import { UpdatePinDto } from './dto/update-pin.dto';
 
 @Injectable()
 export class PinsService {
@@ -28,7 +29,7 @@ export class PinsService {
       .getRawOne()) as { min: number | null };
 
     const dto: any = this.toDto(pin);
-    dto.lowestSalePrice = { won: typeof min === 'number' ? Number(min) : null }; // ✅ 숫자 그대로
+    dto.lowestSalePrice = { won: typeof min === 'number' ? Number(min) : null };
     return dto;
   }
 
