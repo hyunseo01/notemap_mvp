@@ -39,4 +39,9 @@ export class UnitsController {
     await this.service.remove(id);
     return { ok: true };
   }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.service.findOne(id);
+  }
 }

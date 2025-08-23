@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsIn,
   IsInt,
   IsNumber,
@@ -7,7 +8,7 @@ import {
   Max,
   Min,
 } from 'class-validator';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 
 export class CreatePinDto {
   @IsString() title: string;
@@ -21,7 +22,18 @@ export class CreatePinDto {
   @IsOptional() @IsString() officePhone?: string;
   @IsOptional() @IsString() officePhone2?: string;
 
-  @IsOptional() @IsIn(['O', 'X']) elevator?: 'O' | 'X';
+  @IsOptional()
+  @IsBoolean()
+  @Transform(({ value }) => {
+    if (value === 'O') return true;
+    if (value === 'X') return false;
+    if (value === '1' || value === 1) return true;
+    if (value === '0' || value === 0) return false;
+    if (typeof value === 'string') return value.toLowerCase() === 'true';
+    return Boolean(value);
+  })
+  elevator?: boolean;
+
   @IsOptional() @IsString() parkingType?: string;
   @IsOptional() @IsString() parkingGrade?: string;
   @IsOptional() @IsInt() @Min(0) @Max(5) parkingStars?: number;

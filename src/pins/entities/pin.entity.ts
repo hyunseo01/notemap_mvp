@@ -29,8 +29,8 @@ export class Pin {
   @Column({ nullable: true }) officePhone2?: string;
 
   // 설비/주차
-  @Column({ type: 'char', length: 1, nullable: true })
-  elevator?: 'O' | 'X';
+  @Column({ type: 'boolean', default: false })
+  elevator: boolean;
 
   @Column({ nullable: true }) parkingType?: string; // 자주식/기계식/혼합
   @Column({ nullable: true }) parkingGrade?: string;

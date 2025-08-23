@@ -3,7 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Pin } from './entities/pin.entity';
 import { Unit } from '../units/entities/unit.entity';
-import { CreatePinDto, UpdatePinDto } from './dto/create-pin.dto';
+import { CreatePinDto } from './dto/create-pin.dto';
+import { UpdatePinDto } from './dto/update-pin.dto';
 
 @Injectable()
 export class PinsService {
@@ -28,7 +29,7 @@ export class PinsService {
       .getRawOne()) as { min: number | null };
 
     const dto: any = this.toDto(pin);
-    dto.lowestSalePrice = { won: typeof min === 'number' ? Number(min) : null }; // ✅ 숫자 그대로
+    dto.lowestSalePrice = { won: typeof min === 'number' ? Number(min) : null };
     return dto;
   }
 
@@ -54,8 +55,17 @@ export class PinsService {
     address: p.address,
     position: { lat: Number(p.lat), lng: Number(p.lng) },
     status: p.status,
+
+    // 기존 최상위 유지(하위 호환)
     officePhone: p.officePhone,
     officePhone2: p.officePhone2,
+
+    // 프론트 기대 구조에 맞춘 view 병행 제공
+    view: {
+      officePhone: p.officePhone,
+      officePhone2: p.officePhone2,
+    },
+
     elevator: p.elevator,
     parkingType: p.parkingType,
     parkingGrade: p.parkingGrade,
@@ -70,6 +80,6 @@ export class PinsService {
     structureGrade: p.structureGrade,
     publicMemo: p.publicMemo,
     secretMemo: p.secretMemo,
-    images: p.images,
+    images: p.images ?? [],
   });
 }
